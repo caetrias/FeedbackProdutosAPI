@@ -11,5 +11,6 @@ public interface ProdutoService {
     public List<Produto> listarProdutos();
     public Produto buscarProdutoPorId(int id);
 
+    // todo: verificar se de fato isso é um metodo para produto ou feedback
     public Double calcularMediaAvaliacoes();
 }

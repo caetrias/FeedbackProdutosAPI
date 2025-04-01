@@ -3,6 +3,7 @@ package com.caetrias.feedbackprodutosapi.usuario.impl;
 import com.caetrias.feedbackprodutosapi.usuario.Usuario;
 import com.caetrias.feedbackprodutosapi.usuario.UsuarioRepository;
 import com.caetrias.feedbackprodutosapi.usuario.UsuarioService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +16,6 @@ public class UsuarioServiceImpl implements UsuarioService {
     public UsuarioServiceImpl(UsuarioRepository usuarioRepository){
         this.usuarioRepository = usuarioRepository;
     }
-
 
     @Override
     public List<Usuario> listarUsuarios() {
@@ -34,13 +34,22 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    @Transactional
     public void atualizarUsuario(Usuario usuario) {
-        // todo: implementar atualiarUsuario
+        Usuario usuarioAtual = usuarioRepository.findById(usuario.getId()).orElseThrow(
+                () -> new RuntimeException("Usuário com ID " + usuario.getId() + " não encontrado"));
+
+        // Atualiza apenas os campos necessários (caso apenas .save fosse implementado, outros atributos nao citados seriam substituidos por null)
+        usuarioAtual.setNome(usuario.getNome());
+        usuarioAtual.setEmail(usuario.getEmail());
+        // todo: ponto de melhora -> verificar o corpo da requisicao para atualizar o que foi requerido
+
+        usuarioRepository.save(usuarioAtual);
     }
 
     @Override
     public void excluirUsuario(Long id) {
-        // todo: implementar excluirUsuario
+        usuarioRepository.deleteById(id);
     }
 
     @Override

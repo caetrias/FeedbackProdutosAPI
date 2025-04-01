@@ -30,4 +30,15 @@ public class UsuarioController {
         usuarioService.cadastrarUsuario(usuario);
         return ResponseEntity.ok("Usuario cadastrado com sucesso!");
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
+        try {
+            usuario.setId(id);
+            usuarioService.atualizarUsuario(usuario);
+            return ResponseEntity.ok("Usuário atualizado com sucesso!");
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
